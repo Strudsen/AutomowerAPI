@@ -1,5 +1,5 @@
-# pyhusmow
-Api for Controling your Husqvarna automower using Home Assistant
+# AutomowerAPI
+python Api for Controling your Husqvarna automower
 
 # Requirements
   + python 3
