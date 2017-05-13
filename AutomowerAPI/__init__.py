@@ -1,1 +1,1 @@
-from .automowerapi import AutomowerAPI
+from .AutomowerAPI import AutomowerAPI
