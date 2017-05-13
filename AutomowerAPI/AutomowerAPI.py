@@ -16,68 +16,85 @@ class AutomowerAPI:
         self.token = None
 
     def login(self, login, password):
-        response = self.session.post(self._API_IM + 'token',
-                                     headers=self._HEADERS,
-                                     json={
-                                         "data": {
-                                             "attributes": {
-                                                 "password": password,
-                                                 "username": login
-                                             },
-                                             "type": "token"
-                                         }
-                                     })
+        try:
+            response = self.session.post(self._API_IM + 'token',
+                                         headers=self._HEADERS,
+                                         json={
+                                             "data": {
+                                                 "attributes": {
+                                                     "password": password,
+                                                     "username": login
+                                                 },
+                                                 "type": "token"
+                                             }
+                                         })
 
-        response.raise_for_status()
-        self.logger.debug('Logged in successfully')
+            response.raise_for_status()
+            self.logger.debug('Logged in successfully')
 
-        json = response.json()
-        self.token = json["data"]["id"]
-        self.session.headers.update({
-            'Authorization': "Bearer " + self.token,
-            'Authorization-Provider': json["data"]["attributes"]["provider"]
-        })
+            json = response.json()
+            self.token = json["data"]["id"]
+            self.session.headers.update({
+                'Authorization': "Bearer " + self.token,
+                'Authorization-Provider': json["data"]["attributes"]["provider"]
+            })
 
-        self.select_first_robot()
+            self.select_first_robot()
+        except requests.exceptions.RequestException as e: 
+            pass
 
     def logout(self):
-        response = self.session.delete(self._API_IM + 'token/%s' % self.token)
-        response.raise_for_status()
-        self.device_id = None
-        self.token = None
-        del (self.session.headers['Authorization'])
-        self.logger.debug('Logged out successfully')
+        try:
+            response = self.session.delete(self._API_IM + 'token/%s' % self.token)
+            response.raise_for_status()
+            self.device_id = None
+            self.token = None
+            del (self.session.headers['Authorization'])
+            self.logger.debug('Logged out successfully')
+        except requests.exceptions.RequestException as e: 
+            pass
 
     def list_robots(self):
-        response = self.session.get(self._API_TRACK + 'mowers', headers=self._HEADERS)
-        response.raise_for_status()
+        try:
+            response = self.session.get(self._API_TRACK + 'mowers', headers=self._HEADERS)
+            response.raise_for_status()
 
-        return response.json()
+            return response.json()
+        except requests.exceptions.RequestException as e: 
+            pass
 
     def select_first_robot(self):
         result = self.list_robots()
         self.device_id = result[0]['id']
 
     def status(self):
-        response = self.session.get(self._API_TRACK + 'mowers/%s/status' % self.device_id, headers=self._HEADERS)
-        response.raise_for_status()
+        try:
+            response = self.session.get(self._API_TRACK + 'mowers/%s/status' % self.device_id, headers=self._HEADERS)
+            response.raise_for_status()
 
-        return response.json()
+            return response.json()
+        except requests.exceptions.RequestException as e: 
+            pass
 
     def geo_status(self):
-        response = self.session.get(self._API_TRACK + 'mowers/%s/geofence' % self.device_id, headers=self._HEADERS)
-        response.raise_for_status()
+        try:
+            response = self.session.get(self._API_TRACK + 'mowers/%s/geofence' % self.device_id, headers=self._HEADERS)
+            response.raise_for_status()
 
-        return response.json()
+            return response.json()
+        except requests.exceptions.RequestException as e: 
+            pass
 
     def control(self, command):
         if command not in ['PARK', 'STOP', 'START']:
             raise Exception("Unknown command")
-
-        response = self.session.post(self._API_TRACK + 'mowers/%s/control' % self.device_id,
-                                    headers=self._HEADERS,
-                                    json={
-                                        "action": command
-                                    })
-        response.raise_for_status()
+        try:
+            response = self.session.post(self._API_TRACK + 'mowers/%s/control' % self.device_id,
+                                        headers=self._HEADERS,
+                                        json={
+                                            "action": command
+                                        })
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e: 
+            pass
 

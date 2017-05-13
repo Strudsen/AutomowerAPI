@@ -2,7 +2,7 @@ import io
 from setuptools import setup
 setup(
    name='AutomowerAPI',
-   version='0.0.6',
+   version='0.0.7',
    license = 'GNU',
    description='python API to connect to Husqvarna Automower',
    long_description=io.open('README.md', encoding='UTF-8').read(),
