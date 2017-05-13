@@ -29,7 +29,7 @@ class AutomowerAPI:
                                      })
 
         response.raise_for_status()
-        self.logger.info('Logged in successfully')
+        self.logger.debug('Logged in successfully')
 
         json = response.json()
         self.token = json["data"]["id"]
@@ -46,7 +46,7 @@ class AutomowerAPI:
         self.device_id = None
         self.token = None
         del (self.session.headers['Authorization'])
-        self.logger.info('Logged out successfully')
+        self.logger.debug('Logged out successfully')
 
     def list_robots(self):
         response = self.session.get(self._API_TRACK + 'mowers', headers=self._HEADERS)

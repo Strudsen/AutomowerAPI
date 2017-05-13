@@ -2,7 +2,7 @@ import io
 from setuptools import setup
 setup(
    name='AutomowerAPI',
-   version='0.0.3',
+   version='0.0.4',
    license = 'GNU',
    description='python API to connect to Husqvarna Automower',
    long_description=io.open('README.md', encoding='UTF-8').read(),
@@ -11,8 +11,10 @@ setup(
    packages=['AutomowerAPI'],
    url='https://github.com/Strudsen/AutomowerAPI',
    install_requires=[
-        'requests>=2.10.0'
+        'requests',
+        'json',
+        'logging'
    ],
-   keywords = ['automower', 'api'],
+   keywords = ['husqvarna', 'automower', 'api'],
    classifiers = [],
 )
